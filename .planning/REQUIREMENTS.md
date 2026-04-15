@@ -7,9 +7,9 @@
 
 ### Plugin Infrastructure
 
-- [ ] **PLUG-01**: Plugin loads as AU/VST3 in Ableton Live on macOS and Windows
-- [ ] **PLUG-02**: Ableton Live Remote Script bridge enumerates tracks with looper devices and exposes parameters via IPC
-- [ ] **PLUG-03**: Looper device discovery identifies looper-like devices by parameter patterns (not just Ableton Looper by name)
+- [x] **PLUG-01**: Plugin loads as AU/VST3 in Ableton Live on macOS and Windows
+- [x] **PLUG-02**: Ableton Live Remote Script bridge enumerates tracks with looper devices and exposes parameters via IPC
+- [x] **PLUG-03**: Looper device discovery identifies looper-like devices by parameter patterns (not just Ableton Looper by name)
 
 ### Visibility
 
@@ -63,9 +63,9 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| PLUG-01 | Phase 1 | Pending |
-| PLUG-02 | Phase 1 | Pending |
-| PLUG-03 | Phase 1 | Pending |
+| PLUG-01 | Phase 1 | Complete |
+| PLUG-02 | Phase 1 | Complete |
+| PLUG-03 | Phase 1 | Complete |
 | VIS-01 | Phase 2 | Pending |
 | VIS-02 | Phase 2 | Pending |
 | VIS-03 | Phase 2 | Pending |
