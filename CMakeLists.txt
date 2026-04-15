@@ -25,6 +25,7 @@ target_sources(LiveLooperController PRIVATE
     src/Plugin/PluginProcessor.cpp
     src/Plugin/PluginEditor.cpp
     src/Model/LooperState.h
+    src/Model/LooperState.cpp
     src/Model/LooperTracker.cpp
     src/Bridge/BridgeClient.cpp
     src/Bridge/MessageProtocol.cpp

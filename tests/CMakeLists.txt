@@ -15,7 +15,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-# Collect JUCE module sources needed for tests (juce_core only)
+# Collect JUCE module sources needed for tests (juce_core only - no X11 dependency)
 file(GLOB_RECURSE JUCE_CORE_SOURCES
     ${PROJECT_ROOT}/third_party/JUCE/modules/juce_core/juce_core.cpp
     ${PROJECT_ROOT}/third_party/JUCE/modules/juce_core/juce_core_CompilationTime.cpp
@@ -24,8 +24,11 @@ file(GLOB_RECURSE JUCE_CORE_SOURCES
 add_executable(LiveLooperControllerTests
     catch2_main.cpp
     TestMessageProtocol.cpp
+    TestLooperState.cpp
     ${PROJECT_ROOT}/src/Bridge/MessageProtocol.cpp
     ${PROJECT_ROOT}/src/Shared/ProtocolDefs.cpp
+    ${PROJECT_ROOT}/src/Model/LooperState.cpp
+    ${PROJECT_ROOT}/src/Model/LooperTracker.cpp
     ${JUCE_CORE_SOURCES}
 )
 
