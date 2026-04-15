@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-1-PLAN.md
-last_updated: "2026-04-15T12:58:28.431Z"
+stopped_at: Completed 01-2-PLAN.md
+last_updated: "2026-04-15T13:29:46.753Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 3
   completed_phases: 0
   total_plans: 0
-  completed_plans: 1
+  completed_plans: 2
   percent: 0
 ---
 
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 ## Current Position
 
 Phase: 01 (Foundation & Protocol) — EXECUTING
-Plan: 2 of 4
+Plan: 3 of 4
 Status: Ready to execute
 Last activity: 2026-04-15
 
@@ -53,6 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 *Updated after each plan completion*
 | Phase 01 P1 | 32 | 3 tasks | 18 files |
+| Phase 01-foundation-protocol P2 | 14min | 3 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -67,6 +68,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Separate test CMake builds juce_core directly, avoiding X11 dependency for headless Linux test execution
 - [Phase 01]: Protocol constants header-only (ProtocolDefs.h) for zero-overhead access from plugin and test code
 - [Phase 01]: MessageProtocol uses juce::JSON and juce::Uuid built-ins instead of external dependencies
+- [Phase 01-foundation-protocol]: Replaced juce::ChangeBroadcaster with std::function callback in LooperTracker — removes X11 dev dependency from test build
+- [Phase 01-foundation-protocol]: BridgeClient uses MessageLoopCallback template for OSC callbacks (message thread, not audio thread)
+- [Phase 01-foundation-protocol]: PluginEditor reads connection status from APVTS via Timer (all persistent state in processor, not editor)
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ Items acknowledged and carried forward from previous milestone close:
 
 ## Session Continuity
 
-Last session: 2026-04-15T12:58:28.428Z
-Stopped at: Completed 01-1-PLAN.md
+Last session: 2026-04-15T13:29:46.750Z
+Stopped at: Completed 01-2-PLAN.md
 Resume file: None
