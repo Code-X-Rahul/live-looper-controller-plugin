@@ -25,6 +25,7 @@ add_executable(LiveLooperControllerTests
     catch2_main.cpp
     TestMessageProtocol.cpp
     TestLooperState.cpp
+    TestBridgeClient.cpp
     ${PROJECT_ROOT}/src/Bridge/MessageProtocol.cpp
     ${PROJECT_ROOT}/src/Shared/ProtocolDefs.cpp
     ${PROJECT_ROOT}/src/Model/LooperState.cpp
