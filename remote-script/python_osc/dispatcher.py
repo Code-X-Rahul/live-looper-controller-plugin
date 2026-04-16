@@ -6,7 +6,7 @@ import inspect
 import logging
 import re
 import time
-from pythonosc import osc_packet
+from python_osc import osc_packet
 from typing import (
     overload,
     List,
@@ -19,8 +19,8 @@ from typing import (
     Optional,
     DefaultDict,
 )
-from pythonosc.osc_message import OscMessage
-from pythonosc.osc_message_builder import ArgValue
+from python_osc.osc_message import OscMessage
+from python_osc.osc_message_builder import ArgValue
 
 
 class Handler(object):

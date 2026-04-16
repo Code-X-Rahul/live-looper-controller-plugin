@@ -5,12 +5,12 @@ import socket
 import struct
 from typing import AsyncGenerator, Generator, Iterable, List, Union
 
-from pythonosc import slip
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_bundle import OscBundle
-from pythonosc.osc_message import OscMessage
-from pythonosc.osc_message_builder import ArgValue, build_msg
-from pythonosc.osc_tcp_server import MODE_1_1
+from python_osc import slip
+from python_osc.dispatcher import Dispatcher
+from python_osc.osc_bundle import OscBundle
+from python_osc.osc_message import OscMessage
+from python_osc.osc_message_builder import ArgValue, build_msg
+from python_osc.osc_tcp_server import MODE_1_1
 
 
 class TCPClient(object):

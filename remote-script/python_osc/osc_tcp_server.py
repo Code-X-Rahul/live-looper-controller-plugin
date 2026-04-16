@@ -40,8 +40,8 @@ import socketserver
 import struct
 from typing import List, Tuple
 
-from pythonosc import osc_message_builder, slip
-from pythonosc.dispatcher import Dispatcher
+from python_osc import osc_message_builder, slip
+from python_osc.dispatcher import Dispatcher
 
 LOG = logging.getLogger()
 MODE_1_0 = "1.0"

@@ -7,9 +7,9 @@ import socketserver
 from socket import socket as _socket
 from typing import Any, Coroutine, Tuple, Union, cast
 
-from pythonosc import osc_bundle, osc_message
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_message_builder import build_msg
+from python_osc import osc_bundle, osc_message
+from python_osc.dispatcher import Dispatcher
+from python_osc.osc_message_builder import build_msg
 
 _RequestType = Union[_socket, Tuple[bytes, _socket]]
 _AddressType = Union[Tuple[str, int], str]

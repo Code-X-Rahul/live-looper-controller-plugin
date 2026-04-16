@@ -2,9 +2,9 @@
 
 from typing import List
 
-from pythonosc import osc_bundle
-from pythonosc import osc_message
-from pythonosc.parsing import osc_types
+from python_osc import osc_bundle
+from python_osc import osc_message
+from python_osc.parsing import osc_types
 
 # Shortcut to specify an immediate execution of messages in the bundle.
 IMMEDIATELY = osc_types.IMMEDIATELY

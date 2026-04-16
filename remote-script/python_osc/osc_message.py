@@ -2,7 +2,7 @@
 
 import logging
 
-from pythonosc.parsing import osc_types
+from python_osc.parsing import osc_types
 from typing import List, Iterator, Any
 
 

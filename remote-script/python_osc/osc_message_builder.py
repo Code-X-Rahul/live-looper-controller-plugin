@@ -2,8 +2,8 @@
 
 from typing import Any, Iterable, List, Optional, Tuple, Union
 
-from pythonosc import osc_message
-from pythonosc.parsing import osc_types
+from python_osc import osc_message
+from python_osc.parsing import osc_types
 
 # Represents a single OSC argument value.
 # Can be a primitive type, a MIDI packet, or a list/tuple for nested OSC arrays.

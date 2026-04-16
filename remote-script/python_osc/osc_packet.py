@@ -5,9 +5,9 @@ It lets you access easily to OscMessage and OscBundle instances in the packet.
 
 import time
 
-from pythonosc.parsing import osc_types
-from pythonosc import osc_bundle
-from pythonosc import osc_message
+from python_osc.parsing import osc_types
+from python_osc import osc_bundle
+from python_osc import osc_message
 
 from typing import List, NamedTuple
 

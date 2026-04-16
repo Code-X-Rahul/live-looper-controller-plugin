@@ -2,7 +2,7 @@
 
 import struct
 
-from pythonosc.parsing import ntp
+from python_osc.parsing import ntp
 from datetime import datetime, timedelta
 
 from typing import Union, Tuple, cast

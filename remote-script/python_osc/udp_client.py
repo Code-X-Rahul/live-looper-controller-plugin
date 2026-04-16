@@ -10,10 +10,10 @@ else:
 import socket
 from typing import Generator, Union
 
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_bundle import OscBundle
-from pythonosc.osc_message import OscMessage
-from pythonosc.osc_message_builder import ArgValue, OscMessageBuilder
+from python_osc.dispatcher import Dispatcher
+from python_osc.osc_bundle import OscBundle
+from python_osc.osc_message import OscMessage
+from python_osc.osc_message_builder import ArgValue, OscMessageBuilder
 
 
 class UDPClient(object):
