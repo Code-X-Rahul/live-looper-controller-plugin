@@ -6,13 +6,26 @@ namespace looper {
 LiveLooperEditor::LiveLooperEditor(LiveLooperProcessor& processor)
     : AudioProcessorEditor(&processor), processor_(processor)
 {
-    setSize(400, 300);
+    setSize(500, 350);
 
-    // Phase 1: minimal editor showing connection status (Pitfall 5: all state in processor)
+    // Connection status label at top
     addAndMakeVisible(statusLabel_);
     statusLabel_.setText("Connecting...", juce::dontSendNotification);
     statusLabel_.setJustificationType(juce::Justification::centred);
     statusLabel_.setColour(juce::Label::textColourId, juce::Colours::white);
+    statusLabel_.setFont(juce::Font(16.0f, juce::Font::bold));
+
+    // Looper count label
+    addAndMakeVisible(looperCountLabel_);
+    looperCountLabel_.setText("Loopers: 0", juce::dontSendNotification);
+    looperCountLabel_.setJustificationType(juce::Justification::topLeft);
+    looperCountLabel_.setColour(juce::Label::textColourId, juce::Colours::lightgrey);
+
+    // Looper list label - shows each looper's track name and state
+    addAndMakeVisible(looperListLabel_);
+    looperListLabel_.setText("No loopers discovered", juce::dontSendNotification);
+    looperListLabel_.setJustificationType(juce::Justification::topLeft);
+    looperListLabel_.setColour(juce::Label::textColourId, juce::Colours::grey);
 
     // Start timer to update connection status periodically
     startTimer(500);  // Update every 500ms
@@ -30,7 +43,16 @@ void LiveLooperEditor::paint(juce::Graphics& g)
 
 void LiveLooperEditor::resized()
 {
-    statusLabel_.setBounds(getLocalBounds());
+    auto bounds = getLocalBounds();
+
+    // Status label at top
+    statusLabel_.setBounds(bounds.removeFromTop(40));
+
+    // Looper count below status
+    looperCountLabel_.setBounds(bounds.removeFromTop(30));
+
+    // Looper list takes remaining space
+    looperListLabel_.setBounds(bounds);
 }
 
 void LiveLooperEditor::timerCallback()
@@ -57,6 +79,32 @@ void LiveLooperEditor::timerCallback()
     {
         statusLabel_.setText("Connecting...", juce::dontSendNotification);
         statusLabel_.setColour(juce::Label::textColourId, juce::Colours::yellow);
+    }
+
+    // Update looper count and list from tracker
+    auto& tracker = processor_.getLooperTracker();
+    auto loopers = tracker.getAllLoopers();
+
+    looperCountLabel_.setText(
+        juce::String::formatted("Loopers: %d", loopers.size()),
+        juce::dontSendNotification);
+
+    // Build looper list string
+    if (loopers.empty())
+    {
+        looperListLabel_.setText("No loopers discovered", juce::dontSendNotification);
+    }
+    else
+    {
+        juce::StringArray lines;
+        for (const auto& looper : loopers)
+        {
+            lines.add(juce::String::formatted("  [%s] %s: %s",
+                looper.deviceName,
+                looper.trackName,
+                LooperState::stateToString(looper.state)));
+        }
+        looperListLabel_.setText(lines.joinIntoString("\n"), juce::dontSendNotification);
     }
 }
 

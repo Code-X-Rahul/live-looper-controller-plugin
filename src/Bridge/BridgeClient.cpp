@@ -152,6 +152,10 @@ void BridgeClient::handleEvent(const protocol::Event& event)
     {
         handleLooperStateChanged(event);
     }
+    else if (event.event == protocol::EVENT_LOOPER_REMOVED)
+    {
+        handleLooperRemoved(event);
+    }
     else if (event.event == protocol::EVENT_RESULT)
     {
         handleResult(event);
@@ -214,6 +218,16 @@ void BridgeClient::handleLooperStateChanged(const protocol::Event& event)
     }
 
     tracker_.updateState(state.trackId, state);
+}
+
+void BridgeClient::handleLooperRemoved(const protocol::Event& event)
+{
+    // Extract track_id from event data and remove from tracker
+    if (auto* data = event.data.getDynamicObject())
+    {
+        auto trackId = data->getProperty("track_id").toString();
+        tracker_.removeLooper(trackId);
+    }
 }
 
 void BridgeClient::handleResult(const protocol::Event& event)

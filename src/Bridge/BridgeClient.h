@@ -34,6 +34,7 @@ private:
     void handleEvent(const protocol::Event& event);
     void handleLooperDiscovered(const protocol::Event& event);   // D-03: full state push
     void handleLooperStateChanged(const protocol::Event& event); // D-03: full state push
+    void handleLooperRemoved(const protocol::Event& event);     // looper removed from DAW
     void handleResult(const protocol::Event& event);
 
     // Auto-reconnect with exponential backoff (D-07)

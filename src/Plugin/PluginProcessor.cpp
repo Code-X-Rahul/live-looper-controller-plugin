@@ -20,6 +20,17 @@ void LiveLooperProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
     // Initialize BridgeClient and connect (D-06: immediate handshake on load)
     bridgeClient_ = std::make_unique<BridgeClient>(looperTracker_);
     bridgeClient_->connect();
+
+    // Register change callback on LooperTracker to log state changes
+    looperTracker_.onStateChange([this]() {
+        auto loopers = looperTracker_.getAllLoopers();
+        juce::Logger::writeToLog(
+            juce::String::formatted("Looper state update: %d loopers tracked", loopers.size()));
+        for (const auto& l : loopers) {
+            juce::Logger::writeToLog(
+                juce::String::formatted("  %s: %s", l.trackName, LooperState::stateToString(l.state)));
+        }
+    });
 }
 
 void LiveLooperProcessor::releaseResources()

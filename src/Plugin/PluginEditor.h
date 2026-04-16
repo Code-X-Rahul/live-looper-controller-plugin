@@ -23,6 +23,8 @@ public:
 private:
     LiveLooperProcessor& processor_;
     juce::Label statusLabel_;
+    juce::Label looperCountLabel_;
+    juce::Label looperListLabel_;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LiveLooperEditor)
 };
