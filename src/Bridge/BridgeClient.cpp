@@ -79,7 +79,7 @@ void BridgeClient::sendDiscover()
 
 void BridgeClient::sendCommand(const protocol::Message& msg)
 {
-    if (!connected_ && localPort_ == 0)
+    if (!connected_ || localPort_ == 0)
         return;
 
     auto jsonStr = protocol::MessageProtocol::messageToJson(msg);
