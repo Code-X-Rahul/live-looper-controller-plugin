@@ -17,3 +17,10 @@ cmake-build-*/
 *.swp
 *.swo
 VST3/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+build-tests/
