@@ -34,6 +34,18 @@ public:
     /** Create a discover message to enumerate looper devices. */
     static Message createDiscover(const juce::String& nsid = "");
 
+    /** Create a set_state message to change a track's looper state. */
+    static Message createSetState(const juce::String& trackId, const juce::String& targetState);
+
+    /** Create an undo message for a track's looper. */
+    static Message createUndo(const juce::String& trackId);
+
+    /** Create a redo message for a track's looper. */
+    static Message createRedo(const juce::String& trackId);
+
+    /** Create a set_feedback message to adjust feedback for a track's looper. */
+    static Message createSetFeedback(const juce::String& trackId, float feedbackValue);
+
     // --- Serialization ---
 
     /** Serialize a Message to a JSON string (D-01 format). */

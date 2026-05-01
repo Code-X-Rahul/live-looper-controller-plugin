@@ -30,6 +30,9 @@ static const juce::String CMD_HELLO = "hello";
 static const juce::String CMD_DISCOVER = "discover";
 static const juce::String CMD_GET_STATE = "get_state";
 static const juce::String CMD_SET_STATE = "set_state";
+static const juce::String CMD_UNDO = "undo";
+static const juce::String CMD_REDO = "redo";
+static const juce::String CMD_SET_FEEDBACK = "set_feedback";
 
 // Event names
 static const juce::String EVENT_RESULT = "result";

@@ -135,3 +135,112 @@ TEST_CASE("Protocol constants are correct", "[protocol]")
     REQUIRE(STATE_PLAYING == "Playing");
     REQUIRE(STATE_OVERDUBBING == "Overdubbing");
 }
+
+TEST_CASE("Protocol command constants for control commands", "[protocol]")
+{
+    REQUIRE(CMD_SET_STATE == "set_state");
+    REQUIRE(CMD_UNDO == "undo");
+    REQUIRE(CMD_REDO == "redo");
+    REQUIRE(CMD_SET_FEEDBACK == "set_feedback");
+}
+
+// --- Command Message Tests ---
+
+TEST_CASE("MessageProtocol::createSetState generates valid message", "[protocol][commands]")
+{
+    auto msg = MessageProtocol::createSetState("track1", "Recording");
+
+    REQUIRE(msg.uuid.isNotEmpty());
+    REQUIRE(msg.ns == NS_LOOPER);
+    REQUIRE(msg.nsid == "track1");
+    REQUIRE(msg.name == CMD_SET_STATE);
+    REQUIRE(msg.version == PROTOCOL_VERSION);
+
+    REQUIRE(msg.args.isObject());
+    auto* obj = msg.args.getDynamicObject();
+    REQUIRE(obj != nullptr);
+    REQUIRE(obj->getProperty("track_id").toString() == "track1");
+    REQUIRE(obj->getProperty("target_state").toString() == "Recording");
+}
+
+TEST_CASE("MessageProtocol::createUndo generates valid message", "[protocol][commands]")
+{
+    auto msg = MessageProtocol::createUndo("track1");
+
+    REQUIRE(msg.uuid.isNotEmpty());
+    REQUIRE(msg.ns == NS_LOOPER);
+    REQUIRE(msg.nsid == "track1");
+    REQUIRE(msg.name == CMD_UNDO);
+    REQUIRE(msg.version == PROTOCOL_VERSION);
+
+    REQUIRE(msg.args.isObject());
+    auto* obj = msg.args.getDynamicObject();
+    REQUIRE(obj != nullptr);
+    REQUIRE(obj->getProperty("track_id").toString() == "track1");
+}
+
+TEST_CASE("MessageProtocol::createRedo generates valid message", "[protocol][commands]")
+{
+    auto msg = MessageProtocol::createRedo("track1");
+
+    REQUIRE(msg.uuid.isNotEmpty());
+    REQUIRE(msg.ns == NS_LOOPER);
+    REQUIRE(msg.nsid == "track1");
+    REQUIRE(msg.name == CMD_REDO);
+    REQUIRE(msg.version == PROTOCOL_VERSION);
+
+    REQUIRE(msg.args.isObject());
+    auto* obj = msg.args.getDynamicObject();
+    REQUIRE(obj != nullptr);
+    REQUIRE(obj->getProperty("track_id").toString() == "track1");
+}
+
+TEST_CASE("MessageProtocol::createSetFeedback generates valid message", "[protocol][commands]")
+{
+    auto msg = MessageProtocol::createSetFeedback("track1", 0.75f);
+
+    REQUIRE(msg.uuid.isNotEmpty());
+    REQUIRE(msg.ns == NS_LOOPER);
+    REQUIRE(msg.nsid == "track1");
+    REQUIRE(msg.name == CMD_SET_FEEDBACK);
+    REQUIRE(msg.version == PROTOCOL_VERSION);
+
+    REQUIRE(msg.args.isObject());
+    auto* obj = msg.args.getDynamicObject();
+    REQUIRE(obj != nullptr);
+    REQUIRE(obj->getProperty("track_id").toString() == "track1");
+    REQUIRE(std::abs(static_cast<float>(obj->getProperty("feedback")) - 0.75f) < 0.001f);
+}
+
+TEST_CASE("MessageProtocol command messages round-trip through JSON", "[protocol][commands]")
+{
+    // Test createSetState round-trip
+    auto setStateMsg = MessageProtocol::createSetState("track2", "Playing");
+    auto setStateJson = MessageProtocol::messageToJson(setStateMsg);
+    auto setStateRestored = MessageProtocol::jsonToMessage(setStateJson);
+    REQUIRE(setStateRestored.ns == NS_LOOPER);
+    REQUIRE(setStateRestored.nsid == "track2");
+    REQUIRE(setStateRestored.name == CMD_SET_STATE);
+    REQUIRE(setStateRestored.args.getDynamicObject()->getProperty("target_state").toString() == "Playing");
+
+    // Test createUndo round-trip
+    auto undoMsg = MessageProtocol::createUndo("track3");
+    auto undoJson = MessageProtocol::messageToJson(undoMsg);
+    auto undoRestored = MessageProtocol::jsonToMessage(undoJson);
+    REQUIRE(undoRestored.name == CMD_UNDO);
+    REQUIRE(undoRestored.args.getDynamicObject()->getProperty("track_id").toString() == "track3");
+
+    // Test createRedo round-trip
+    auto redoMsg = MessageProtocol::createRedo("track4");
+    auto redoJson = MessageProtocol::messageToJson(redoMsg);
+    auto redoRestored = MessageProtocol::jsonToMessage(redoJson);
+    REQUIRE(redoRestored.name == CMD_REDO);
+    REQUIRE(redoRestored.args.getDynamicObject()->getProperty("track_id").toString() == "track4");
+
+    // Test createSetFeedback round-trip
+    auto feedbackMsg = MessageProtocol::createSetFeedback("track5", 0.3f);
+    auto feedbackJson = MessageProtocol::messageToJson(feedbackMsg);
+    auto feedbackRestored = MessageProtocol::jsonToMessage(feedbackJson);
+    REQUIRE(feedbackRestored.name == CMD_SET_FEEDBACK);
+    REQUIRE(std::abs(static_cast<float>(feedbackRestored.args.getDynamicObject()->getProperty("feedback")) - 0.3f) < 0.001f);
+}

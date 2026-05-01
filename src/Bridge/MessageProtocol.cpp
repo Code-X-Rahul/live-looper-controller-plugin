@@ -26,6 +26,54 @@ Message MessageProtocol::createDiscover(const juce::String& nsid)
     return msg;
 }
 
+Message MessageProtocol::createSetState(const juce::String& trackId, const juce::String& targetState)
+{
+    Message msg;
+    msg.uuid = generateUuid().toString();
+    msg.ns = protocol::NS_LOOPER;
+    msg.nsid = trackId;
+    msg.name = protocol::CMD_SET_STATE;
+    msg.args = juce::var(juce::JSON::parse("{\"track_id\": \"" + trackId + "\", \"target_state\": \"" + targetState + "\"}"));
+    msg.version = protocol::PROTOCOL_VERSION;
+    return msg;
+}
+
+Message MessageProtocol::createUndo(const juce::String& trackId)
+{
+    Message msg;
+    msg.uuid = generateUuid().toString();
+    msg.ns = protocol::NS_LOOPER;
+    msg.nsid = trackId;
+    msg.name = protocol::CMD_UNDO;
+    msg.args = juce::var(juce::JSON::parse("{\"track_id\": \"" + trackId + "\"}"));
+    msg.version = protocol::PROTOCOL_VERSION;
+    return msg;
+}
+
+Message MessageProtocol::createRedo(const juce::String& trackId)
+{
+    Message msg;
+    msg.uuid = generateUuid().toString();
+    msg.ns = protocol::NS_LOOPER;
+    msg.nsid = trackId;
+    msg.name = protocol::CMD_REDO;
+    msg.args = juce::var(juce::JSON::parse("{\"track_id\": \"" + trackId + "\"}"));
+    msg.version = protocol::PROTOCOL_VERSION;
+    return msg;
+}
+
+Message MessageProtocol::createSetFeedback(const juce::String& trackId, float feedbackValue)
+{
+    Message msg;
+    msg.uuid = generateUuid().toString();
+    msg.ns = protocol::NS_LOOPER;
+    msg.nsid = trackId;
+    msg.name = protocol::CMD_SET_FEEDBACK;
+    msg.args = juce::var(juce::JSON::parse("{\"track_id\": \"" + trackId + "\", \"feedback\": " + juce::String(feedbackValue) + "}"));
+    msg.version = protocol::PROTOCOL_VERSION;
+    return msg;
+}
+
 juce::String MessageProtocol::messageToJson(const Message& msg)
 {
     juce::DynamicObject::Ptr obj = new juce::DynamicObject();
