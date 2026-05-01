@@ -16,6 +16,15 @@ LooperListView::LooperListView()
     contentContainer_ = std::make_unique<juce::Component>();
     viewport_->setViewedComponent(contentContainer_.get(), false);
 
+    // Empty state label (hidden by default)
+    emptyStateLabel_ = std::make_unique<juce::Label>();
+    emptyStateLabel_->setText("No loopers discovered", juce::dontSendNotification);
+    emptyStateLabel_->setColour(juce::Label::textColourId, juce::Colours::grey);
+    emptyStateLabel_->setFont(juce::Font(14.0f, juce::Font::plain));
+    emptyStateLabel_->setJustificationType(juce::Justification::centred);
+    emptyStateLabel_->setVisible(false);
+    contentContainer_->addAndMakeVisible(*emptyStateLabel_);
+
     setSize(400, 500);  // Default size (per plan: 400x500 for 5+ loopers)
 }
 
@@ -87,13 +96,12 @@ void LooperListView::refreshFromTracker(LooperTracker& tracker)
     if (loopers.empty())
     {
         contentContainer_->setSize(getWidth() - 20, 100);
-        juce::Graphics g(*contentContainer_);
-        g.fillAll(juce::Colours::darkgrey);
-        g.setColour(juce::Colours::grey);
-        g.setFont(juce::Font(14.0f));
-        g.drawText("No loopers discovered",
-                   0, 0, contentContainer_->getWidth(), 100,
-                   juce::Justification::centred);
+        emptyStateLabel_->setBounds(0, 0, contentContainer_->getWidth(), 100);
+        emptyStateLabel_->setVisible(true);
+    }
+    else
+    {
+        emptyStateLabel_->setVisible(false);
     }
 }
 

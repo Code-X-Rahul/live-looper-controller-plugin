@@ -21,7 +21,7 @@ public:
     // Send commands to Remote Script
     void sendHello();        // D-06: immediate handshake on load
     void sendDiscover();     // Request looper discovery
-    void sendCommand(const protocol::Message& msg);  // Send any command
+    void sendCommand(const Message& msg);  // Send any command
 
     // Looper control commands
     void sendSetState(const juce::String& trackId, const juce::String& targetState);
@@ -37,11 +37,11 @@ private:
     bool bindToPortRange(int startPort, int endPort);
 
     // Message handling
-    void handleEvent(const protocol::Event& event);
-    void handleLooperDiscovered(const protocol::Event& event);   // D-03: full state push
-    void handleLooperStateChanged(const protocol::Event& event); // D-03: full state push
-    void handleLooperRemoved(const protocol::Event& event);     // looper removed from DAW
-    void handleResult(const protocol::Event& event);
+    void handleEvent(const Event& event);
+    void handleLooperDiscovered(const Event& event);   // D-03: full state push
+    void handleLooperStateChanged(const Event& event); // D-03: full state push
+    void handleLooperRemoved(const Event& event);     // looper removed from DAW
+    void handleResult(const Event& event);
 
     // Auto-reconnect with exponential backoff (D-07)
     void startReconnectTimer();

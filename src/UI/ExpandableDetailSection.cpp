@@ -98,14 +98,14 @@ void ExpandableDetailSection::toggle()
 void ExpandableDetailSection::updateVisibility()
 {
     // Per D-08: all detail controls hidden when collapsed, visible when expanded
-    auto visible = expanded_ ? juce::VisibleWhenAlways : juce::VisibleWhenEmpty;
+    bool isVisible = expanded_;
 
-    loopLengthLabel_.setVisible(visible);
-    cycleCountLabel_.setVisible(visible);
-    undoButton_.setVisible(visible);
-    redoButton_.setVisible(visible);
-    feedbackSlider_.setVisible(visible);
-    feedbackLabel_.setVisible(visible);
+    loopLengthLabel_.setVisible(isVisible);
+    cycleCountLabel_.setVisible(isVisible);
+    undoButton_.setVisible(isVisible);
+    redoButton_.setVisible(isVisible);
+    feedbackSlider_.setVisible(isVisible);
+    feedbackLabel_.setVisible(isVisible);
 
     // Notify parent to update layout
     if (auto* parent = getParentComponent())

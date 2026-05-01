@@ -62,7 +62,7 @@ bool BridgeClient::isConnected() const
 
 void BridgeClient::sendHello()
 {
-    auto msg = protocol::MessageProtocol::createHello(localPort_);
+    auto msg = MessageProtocol::createHello(localPort_);
 
     // After sending hello, set remote port to script port range start
     // The remote script will respond with its actual port
@@ -73,40 +73,40 @@ void BridgeClient::sendHello()
 
 void BridgeClient::sendDiscover()
 {
-    auto msg = protocol::MessageProtocol::createDiscover();
+    auto msg = MessageProtocol::createDiscover();
     sendCommand(msg);
 }
 
 void BridgeClient::sendSetState(const juce::String& trackId, const juce::String& targetState)
 {
-    auto msg = protocol::MessageProtocol::createSetState(trackId, targetState);
+    auto msg = MessageProtocol::createSetState(trackId, targetState);
     sendCommand(msg);
 }
 
 void BridgeClient::sendUndo(const juce::String& trackId)
 {
-    auto msg = protocol::MessageProtocol::createUndo(trackId);
+    auto msg = MessageProtocol::createUndo(trackId);
     sendCommand(msg);
 }
 
 void BridgeClient::sendRedo(const juce::String& trackId)
 {
-    auto msg = protocol::MessageProtocol::createRedo(trackId);
+    auto msg = MessageProtocol::createRedo(trackId);
     sendCommand(msg);
 }
 
 void BridgeClient::sendSetFeedback(const juce::String& trackId, float feedbackValue)
 {
-    auto msg = protocol::MessageProtocol::createSetFeedback(trackId, feedbackValue);
+    auto msg = MessageProtocol::createSetFeedback(trackId, feedbackValue);
     sendCommand(msg);
 }
 
-void BridgeClient::sendCommand(const protocol::Message& msg)
+void BridgeClient::sendCommand(const Message& msg)
 {
     if (!connected_ || localPort_ == 0)
         return;
 
-    auto jsonStr = protocol::MessageProtocol::messageToJson(msg);
+    auto jsonStr = MessageProtocol::messageToJson(msg);
 
     // Send via OSC — the JSON payload goes as a string argument
     // on the /loopercontrol address
@@ -114,7 +114,7 @@ void BridgeClient::sendCommand(const protocol::Message& msg)
     oscMessage.addString(jsonStr);
 
     // Send to localhost on the remote script port
-    if (!sender_.send("127.0.0.1", remotePort_, oscMessage))
+    if (!sender_.sendToIPAddress("127.0.0.1", remotePort_, oscMessage))
     {
         // Send failed — may need reconnect
         // In a production build this would trigger reconnect timer (D-07)
@@ -132,7 +132,7 @@ void BridgeClient::oscMessageReceived(const juce::OSCMessage& message)
     auto jsonStr = message[0].getString();
 
     // Try to parse as an Event first (script → plugin messages are events)
-    auto event = protocol::MessageProtocol::jsonToEvent(jsonStr);
+    auto event = MessageProtocol::jsonToEvent(jsonStr);
     if (event.event.isNotEmpty())
     {
         handleEvent(event);
@@ -140,12 +140,12 @@ void BridgeClient::oscMessageReceived(const juce::OSCMessage& message)
     }
 
     // Try to parse as a Message (for responses)
-    auto responseMsg = protocol::MessageProtocol::jsonToMessage(jsonStr);
+    auto responseMsg = MessageProtocol::jsonToMessage(jsonStr);
     if (responseMsg.name.isNotEmpty())
     {
         // Handle as a response message
         // For now, results are handled as events
-        protocol::Event resultEvent;
+        Event resultEvent;
         resultEvent.event = protocol::EVENT_RESULT;
         resultEvent.data = responseMsg.args;
         resultEvent.version = responseMsg.version;
@@ -166,7 +166,7 @@ bool BridgeClient::bindToPortRange(int startPort, int endPort)
     return false;
 }
 
-void BridgeClient::handleEvent(const protocol::Event& event)
+void BridgeClient::handleEvent(const Event& event)
 {
     if (event.event == protocol::EVENT_LOOPER_DISCOVERED)
     {
@@ -186,7 +186,7 @@ void BridgeClient::handleEvent(const protocol::Event& event)
     }
 }
 
-void BridgeClient::handleLooperDiscovered(const protocol::Event& event)
+void BridgeClient::handleLooperDiscovered(const Event& event)
 {
     // D-03: Full state push — create LooperState from event data
     LooperState state;
@@ -217,7 +217,7 @@ void BridgeClient::handleLooperDiscovered(const protocol::Event& event)
     tracker_.addLooper(state);
 }
 
-void BridgeClient::handleLooperStateChanged(const protocol::Event& event)
+void BridgeClient::handleLooperStateChanged(const Event& event)
 {
     // D-03: Full state push — update LooperState from event data
     LooperState state;
@@ -250,7 +250,7 @@ void BridgeClient::handleLooperStateChanged(const protocol::Event& event)
     tracker_.updateState(state.trackId, state);
 }
 
-void BridgeClient::handleLooperRemoved(const protocol::Event& event)
+void BridgeClient::handleLooperRemoved(const Event& event)
 {
     // Extract track_id from event data and remove from tracker
     if (auto* data = event.data.getDynamicObject())
@@ -260,7 +260,7 @@ void BridgeClient::handleLooperRemoved(const protocol::Event& event)
     }
 }
 
-void BridgeClient::handleResult(const protocol::Event& event)
+void BridgeClient::handleResult(const Event& event)
 {
     // Handle result messages — check for success/failure
     // For Phase 1, just check connection and update state

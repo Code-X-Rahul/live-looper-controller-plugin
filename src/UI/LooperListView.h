@@ -30,6 +30,7 @@ private:
     std::unique_ptr<StatusHeaderBar> headerBar_;
     std::unique_ptr<juce::Viewport> viewport_;
     std::unique_ptr<juce::Component> contentContainer_;
+    std::unique_ptr<juce::Label> emptyStateLabel_;
     std::map<juce::String, std::unique_ptr<LooperTrackComponent>> trackComponents_;
 
     void resized() override;

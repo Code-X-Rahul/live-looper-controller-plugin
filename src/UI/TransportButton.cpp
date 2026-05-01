@@ -38,10 +38,10 @@ juce::String TransportButton::getStateSymbol(LooperState::State state) const
     using State = LooperState::State;
     switch (state)
     {
-        case State::Stopped:    return "\u25RU";   // ⏹ (stop square)
-        case State::Recording: return "\u25B9";   // ⏺ (record circle)
-        case State::Playing:    return "\u25B6";   // ▶ (play triangle)
-        case State::Overdubbing: return "\u2295";  // ⊕ (circled plus)
+        case State::Stopped:    return "\xE2\x96\xB9";   // ⏹ (stop square)
+        case State::Recording: return "\xE2\x97\x89";   // ⏺ (record circle)
+        case State::Playing:    return "\xE2\x96\xB6";   // ▶ (play triangle)
+        case State::Overdubbing: return "\xE2\x8A\x95";  // ⊕ (circled plus)
         default:                return "?";
     }
 }
@@ -74,7 +74,7 @@ void TransportButton::paint(juce::Graphics& g)
 
     // Symbol text centered
     g.setColour(getStateColour(state_));
-    g.setFont(juce::Font(18.0f));
+    g.setFont(juce::Font(18.0f, juce::Font::plain));
     g.drawText(getStateSymbol(state_), bounds, juce::Justification::centred);
 }
 
