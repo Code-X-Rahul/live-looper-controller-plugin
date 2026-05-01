@@ -30,6 +30,12 @@ target_sources(LiveLooperController PRIVATE
     src/Bridge/BridgeClient.cpp
     src/Bridge/MessageProtocol.cpp
     src/Shared/ProtocolDefs.cpp
+    # UI components (per plan 02-02)
+    src/UI/TransportButton.cpp
+    src/UI/StatusHeaderBar.cpp
+    src/UI/ExpandableDetailSection.cpp
+    src/UI/LooperTrackComponent.cpp
+    src/UI/LooperListView.cpp
 )
 
 target_include_directories(LiveLooperController PRIVATE

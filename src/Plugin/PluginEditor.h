@@ -1,7 +1,7 @@
 #pragma once
 
 #include <juce_audio_processors/juce_audio_processors.h>
-#include "../Bridge/BridgeClient.h"
+#include "LooperListView.h"
 
 namespace looper {
 
@@ -16,15 +16,16 @@ public:
 
     void paint(juce::Graphics& g) override;
     void resized() override;
-
-    // Timer callback for updating connection status display
     void timerCallback() override;
 
 private:
     LiveLooperProcessor& processor_;
-    juce::Label statusLabel_;
-    juce::Label looperCountLabel_;
-    juce::Label looperListLabel_;
+    std::unique_ptr<LooperListView> looperListView_;
+
+    // Per PITFALL 5: Timer-based refresh reads state from processor_.getLooperTracker()
+    // LooperTracker::onStateChange triggers more responsive updates
+    bool stateChangePending_ = false;
+    void handleStateChange();  // Called by Timer and by LooperTracker callback
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(LiveLooperEditor)
 };
