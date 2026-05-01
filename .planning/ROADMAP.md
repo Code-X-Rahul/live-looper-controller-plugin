@@ -39,7 +39,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can trigger record, overdub, play, and stop for any looper from the panel, including multi-purpose transport button cycling
   4. Looper state changes in the DAW appear in the plugin UI within 100ms
   5. User can see loop timing details (length, bar position, cycle count), trigger undo/redo, and adjust feedback amount per looper
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 02-01-PLAN.md — Protocol, model, and bridge command extensions for looper control
+- [ ] 02-02-PLAN.md — JUCE UI components, looper panel, and editor rebuild with reactive updates
 **UI hint**: yes
 
 ### Phase 3: Sync, Presets & Performance
@@ -63,5 +65,5 @@ Phases execute in numeric order: 1 → 2 → 3
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation & Protocol | 4/4 | ✓ Complete | 2026-04-16 |
-| 2. Visual Control Surface | 0/? | Not started | - |
+| 2. Visual Control Surface | 0/2 | Not started | - |
 | 3. Sync, Presets & Performance | 0/? | Not started | - |
