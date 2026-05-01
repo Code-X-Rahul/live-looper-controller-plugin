@@ -148,6 +148,91 @@ class LooperControlSurface(ControlSurface):
                 self._discovery.stop_listening()
                 self._full_scan()
                 return {"success": True, "loopers_found": len(self._discovered_loopers)}
+
+            elif name == "set_state":
+                # Change the state of a looper device
+                track_id = args.get("track_id", "")
+                target_state = args.get("target_state", "Stopped")
+
+                try:
+                    track_idx = int(track_id)
+                    looper_info = self._discovered_loopers.get(track_id)
+                    if looper_info is None:
+                        return {"success": False, "error": "looper_not_found"}
+
+                    device_idx = int(looper_info.get("device_id", "0"))
+                    state_value = LooperDiscovery.ABLETON_LOOPER_STATE_REVERSE_MAP.get(target_state, 0)
+
+                    if self._discovery._set_looper_param(track_idx, device_idx, "State", state_value):
+                        return {"success": True}
+                    else:
+                        return {"success": False, "error": "parameter_set_failed"}
+                except Exception as e:
+                    self._log_message(f"LooperControlSurface: set_state error: {e}")
+                    return {"success": False, "error": str(e)}
+
+            elif name == "undo":
+                # Trigger undo on a looper device
+                track_id = args.get("track_id", "")
+
+                try:
+                    track_idx = int(track_id)
+                    looper_info = self._discovered_loopers.get(track_id)
+                    if looper_info is None:
+                        return {"success": False, "error": "looper_not_found"}
+
+                    device_idx = int(looper_info.get("device_id", "0"))
+
+                    if self._discovery._set_looper_param(track_idx, device_idx, "Undo", 1.0):
+                        return {"success": True}
+                    else:
+                        return {"success": False, "error": "parameter_set_failed"}
+                except Exception as e:
+                    self._log_message(f"LooperControlSurface: undo error: {e}")
+                    return {"success": False, "error": str(e)}
+
+            elif name == "redo":
+                # Trigger redo on a looper device
+                track_id = args.get("track_id", "")
+
+                try:
+                    track_idx = int(track_id)
+                    looper_info = self._discovered_loopers.get(track_id)
+                    if looper_info is None:
+                        return {"success": False, "error": "looper_not_found"}
+
+                    device_idx = int(looper_info.get("device_id", "0"))
+
+                    if self._discovery._set_looper_param(track_idx, device_idx, "Redo", 1.0):
+                        return {"success": True}
+                    else:
+                        return {"success": False, "error": "parameter_set_failed"}
+                except Exception as e:
+                    self._log_message(f"LooperControlSurface: redo error: {e}")
+                    return {"success": False, "error": str(e)}
+
+            elif name == "set_feedback":
+                # Set the feedback value on a looper device
+                track_id = args.get("track_id", "")
+                feedback = args.get("feedback", 0.5)
+
+                try:
+                    track_idx = int(track_id)
+                    looper_info = self._discovered_loopers.get(track_id)
+                    if looper_info is None:
+                        return {"success": False, "error": "looper_not_found"}
+
+                    device_idx = int(looper_info.get("device_id", "0"))
+                    feedback_value = float(feedback)
+
+                    if self._discovery._set_looper_param(track_idx, device_idx, "Feedback", feedback_value):
+                        return {"success": True}
+                    else:
+                        return {"success": False, "error": "parameter_set_failed"}
+                except Exception as e:
+                    self._log_message(f"LooperControlSurface: set_feedback error: {e}")
+                    return {"success": False, "error": str(e)}
+
         elif ns == "system":
             if name == "ping":
                 return {"success": True, "pong": True}

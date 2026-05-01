@@ -19,6 +19,14 @@ ABLETON_LOOPER_STATE_MAP = {
     3: "Overdubbing",
 }
 
+# Reverse map for setting looper state from string to integer value
+ABLETON_LOOPER_STATE_REVERSE_MAP = {
+    "Stopped": 0,
+    "Recording": 1,
+    "Playing": 2,
+    "Overdubbing": 3,
+}
+
 
 class LooperDiscovery:
     """Discovers looper-like devices by parameter pattern matching."""
@@ -158,3 +166,51 @@ class LooperDiscovery:
             dict: Currently discovered loopers keyed by track_id
         """
         return self._loopers.copy()
+
+    def _set_looper_param(self, track_idx, device_idx, param_name, value):
+        """Set a parameter on a looper device at the given track/device indices.
+
+        Args:
+            track_idx: Index of the track
+            device_idx: Index of the device within the track
+            param_name: Name of the parameter to set
+            value: Value to set the parameter to
+
+        Returns:
+            bool: True if the parameter was set successfully
+        """
+        try:
+            track = self._song.tracks[track_idx]
+            device = track.devices[device_idx]
+
+            if not self._is_looper_device(device):
+                return False
+
+            for param in device.parameters:
+                if param.name == param_name:
+                    param.value = value
+                    return True
+            return False
+        except Exception:
+            return False
+
+    def _get_looper_params(self, track_idx, device_idx):
+        """Get all parameters for a looper device at the given track/device indices.
+
+        Args:
+            track_idx: Index of the track
+            device_idx: Index of the device within the track
+
+        Returns:
+            list: List of parameter objects, or empty list if device not found
+        """
+        try:
+            track = self._song.tracks[track_idx]
+            device = track.devices[device_idx]
+
+            if not self._is_looper_device(device):
+                return []
+
+            return [p for p in device.parameters]
+        except Exception:
+            return []
