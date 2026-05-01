@@ -40,8 +40,8 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Looper state changes in the DAW appear in the plugin UI within 100ms
   5. User can see loop timing details (length, bar position, cycle count), trigger undo/redo, and adjust feedback amount per looper
 **Plans**: 2 plans
-- [ ] 02-01-PLAN.md — Protocol, model, and bridge command extensions for looper control
-- [ ] 02-02-PLAN.md — JUCE UI components, looper panel, and editor rebuild with reactive updates
+- [x] 02-01-PLAN.md — Protocol, model, and bridge command extensions for looper control
+- [x] 02-02-PLAN.md — JUCE UI components, looper panel, and editor rebuild with reactive updates
 **UI hint**: yes
 
 ### Phase 3: Sync, Presets & Performance
