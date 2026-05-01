@@ -49,7 +49,6 @@ target_compile_definitions(LiveLooperControllerTests PRIVATE
 
 target_link_libraries(LiveLooperControllerTests PRIVATE
     Catch2::Catch2WithMain
-    pthread
     stdc++fs
 )
 
