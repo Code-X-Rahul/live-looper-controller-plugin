@@ -77,6 +77,30 @@ void BridgeClient::sendDiscover()
     sendCommand(msg);
 }
 
+void BridgeClient::sendSetState(const juce::String& trackId, const juce::String& targetState)
+{
+    auto msg = protocol::MessageProtocol::createSetState(trackId, targetState);
+    sendCommand(msg);
+}
+
+void BridgeClient::sendUndo(const juce::String& trackId)
+{
+    auto msg = protocol::MessageProtocol::createUndo(trackId);
+    sendCommand(msg);
+}
+
+void BridgeClient::sendRedo(const juce::String& trackId)
+{
+    auto msg = protocol::MessageProtocol::createRedo(trackId);
+    sendCommand(msg);
+}
+
+void BridgeClient::sendSetFeedback(const juce::String& trackId, float feedbackValue)
+{
+    auto msg = protocol::MessageProtocol::createSetFeedback(trackId, feedbackValue);
+    sendCommand(msg);
+}
+
 void BridgeClient::sendCommand(const protocol::Message& msg)
 {
     if (!connected_ || localPort_ == 0)
@@ -185,6 +209,9 @@ void BridgeClient::handleLooperDiscovered(const protocol::Event& event)
         state.loopLengthBars = data->getProperty("loop_length_bars").isVoid()
                                 ? 0
                                 : static_cast<int>(data->getProperty("loop_length_bars"));
+        state.cycleCount = data->getProperty("cycle_count").isVoid()
+                            ? 0
+                            : static_cast<int>(data->getProperty("cycle_count"));
     }
 
     tracker_.addLooper(state);
@@ -215,6 +242,9 @@ void BridgeClient::handleLooperStateChanged(const protocol::Event& event)
         state.loopLengthBars = data->getProperty("loop_length_bars").isVoid()
                                 ? 0
                                 : static_cast<int>(data->getProperty("loop_length_bars"));
+        state.cycleCount = data->getProperty("cycle_count").isVoid()
+                            ? 0
+                            : static_cast<int>(data->getProperty("cycle_count"));
     }
 
     tracker_.updateState(state.trackId, state);

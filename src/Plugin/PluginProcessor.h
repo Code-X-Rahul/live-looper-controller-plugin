@@ -40,6 +40,7 @@ public:
     // APVTS access
     juce::AudioProcessorValueTreeState& getAPVTS() { return apvts_; }
     LooperTracker& getLooperTracker() { return looperTracker_; }
+    BridgeClient* getBridgeClient() { return bridgeClient_.get(); }
 
 private:
     static juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout();

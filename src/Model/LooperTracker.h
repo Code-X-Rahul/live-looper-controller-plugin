@@ -39,6 +39,9 @@ public:
     // Change callback subscription
     void onStateChange(ChangeCallback callback);
 
+    // Increment cycle count for a looper (D-13)
+    void incrementCycleCount(const juce::String& trackId);
+
 private:
     void notifyChange();
 

@@ -12,7 +12,8 @@ bool LooperState::operator==(const LooperState& other) const
         && state == other.state
         && std::abs(feedback - other.feedback) < 0.001f
         && reverse == other.reverse
-        && loopLengthBars == other.loopLengthBars;
+        && loopLengthBars == other.loopLengthBars
+        && cycleCount == other.cycleCount;
 }
 
 juce::String LooperState::stateToString(State s)

@@ -23,6 +23,12 @@ public:
     void sendDiscover();     // Request looper discovery
     void sendCommand(const protocol::Message& msg);  // Send any command
 
+    // Looper control commands
+    void sendSetState(const juce::String& trackId, const juce::String& targetState);
+    void sendUndo(const juce::String& trackId);
+    void sendRedo(const juce::String& trackId);
+    void sendSetFeedback(const juce::String& trackId, float feedbackValue);
+
     // OSCReceiver::Listener callback (runs on message thread per MessageLoopCallback)
     void oscMessageReceived(const juce::OSCMessage& message) override;
 

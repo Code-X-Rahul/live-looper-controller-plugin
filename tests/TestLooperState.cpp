@@ -178,3 +178,76 @@ TEST_CASE("LooperTracker remove looper", "[LooperTracker]")
     auto retrieved = tracker.getLooper("track1");
     REQUIRE_FALSE(retrieved.has_value());
 }
+
+// --- Cycle Count Tests ---
+
+TEST_CASE("LooperState comparison: same cycleCount", "[LooperState]")
+{
+    LooperState a;
+    a.trackId = "track1";
+    a.state = LooperState::Playing;
+    a.cycleCount = 3;
+
+    LooperState b;
+    b.trackId = "track1";
+    b.state = LooperState::Playing;
+    b.cycleCount = 3;
+
+    REQUIRE(a == b);
+}
+
+TEST_CASE("LooperState comparison: different cycleCount", "[LooperState]")
+{
+    LooperState a;
+    a.trackId = "track1";
+    a.state = LooperState::Playing;
+    a.cycleCount = 3;
+
+    LooperState b;
+    b.trackId = "track1";
+    b.state = LooperState::Playing;
+    b.cycleCount = 5;
+
+    REQUIRE(a != b);
+}
+
+TEST_CASE("LooperTracker::incrementCycleCount increments and notifies", "[LooperTracker]")
+{
+    LooperTracker tracker;
+    int changeCount = 0;
+    tracker.onStateChange([&changeCount]() { ++changeCount; });
+
+    LooperState state;
+    state.trackId = "track1";
+    state.trackName = "Guitar";
+    state.deviceId = "0";
+    state.state = LooperState::Playing;
+    state.cycleCount = 0;
+
+    tracker.addLooper(state);
+    REQUIRE(changeCount == 1);
+
+    tracker.incrementCycleCount("track1");
+    REQUIRE(changeCount == 2);
+
+    auto retrieved = tracker.getLooper("track1");
+    REQUIRE(retrieved.has_value());
+    REQUIRE(retrieved->cycleCount == 1);
+
+    tracker.incrementCycleCount("track1");
+    REQUIRE(changeCount == 3);
+
+    auto updated = tracker.getLooper("track1");
+    REQUIRE(updated->cycleCount == 2);
+}
+
+TEST_CASE("LooperTracker::incrementCycleCount non-existent track is no-op", "[LooperTracker]")
+{
+    LooperTracker tracker;
+    int changeCount = 0;
+    tracker.onStateChange([&changeCount]() { ++changeCount; });
+
+    // Should not crash
+    tracker.incrementCycleCount("nonexistent");
+    REQUIRE(changeCount == 0);
+}

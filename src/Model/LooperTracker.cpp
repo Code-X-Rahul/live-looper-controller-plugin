@@ -87,4 +87,14 @@ void LooperTracker::notifyChange()
     }
 }
 
+void LooperTracker::incrementCycleCount(const juce::String& trackId)
+{
+    auto it = loopers_.find(trackId);
+    if (it != loopers_.end())
+    {
+        it->second.cycleCount++;
+        notifyChange();
+    }
+}
+
 } // namespace looper

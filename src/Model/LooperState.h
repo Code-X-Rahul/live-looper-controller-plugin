@@ -16,6 +16,7 @@ struct LooperState
     float feedback = 0.5f;        // 0.0-1.0 normalized
     bool reverse = false;
     int loopLengthBars = 0;       // 0 = free, N = N bars
+    int cycleCount = 0;          // Number of times the loop has played through (D-13)
 
     // Comparison for diff-based updates (D-03)
     bool operator==(const LooperState& other) const;
