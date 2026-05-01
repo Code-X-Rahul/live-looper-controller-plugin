@@ -1,0 +1,72 @@
+name: Build VST3 Plugin
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -G "Visual Studio 17 2022" -A x64
+
+      - name: Build
+        run: |
+          cmake --build build --config Release
+
+      - name: Locate VST3
+        id: locate
+        run: |
+          dir "build\LiveLooperController_artefacts\Release\VST3"
+          echo "vst3_path=Live Looper Controller.vst3" >> %GITHUB_OUTPUT%
+          echo "artifact_name=LiveLooperController-Windows-VST3" >> %GITHUB_OUTPUT%
+
+      - name: Create artifact
+        shell: powershell
+        run: |
+          Compress-Archive -Path "build/LiveLooperController_artefacts/Release/VST3/Live Looper Controller.vst3" -DestinationPath "LiveLooperController-Windows-VST3.zip" -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveLooperController-Windows-VST3
+          path: LiveLooperController-Windows-VST3.zip
+          retention-days: 30
+
+  build-macos:
+    runs-on: macos-latest
+    if: false  # Disable for now, enable if needed
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Create artifact
+        run: |
+          mkdir -p artifact
+          cp -r build/LiveLooperController_artefacts/Release/VST3/*.vst3 artifact/
+          tar -czf LiveLooperController-macOS-VST3.tar.gz artifact
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LiveLooperController-macOS-VST3
+          path: LiveLooperController-macOS-VST3.tar.gz
+          retention-days: 30
